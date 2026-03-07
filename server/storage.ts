@@ -1,37 +1,32 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { type Message, type InsertMessage } from "@shared/schema";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  getMessages(): Promise<Message[]>;
+  createMessage(message: InsertMessage): Promise<Message>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+  private messages: Map<number, Message>;
+  private currentId: number;
 
   constructor() {
-    this.users = new Map();
+    this.messages = new Map();
+    this.currentId = 1;
+    
+    // Seed some initial data so the app isn't completely empty
+    this.createMessage({ content: "Welcome to your new blank Node.js + Express app!" });
+    this.createMessage({ content: "The backend is ready to accept requests." });
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getMessages(): Promise<Message[]> {
+    return Array.from(this.messages.values());
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async createMessage(insertMessage: InsertMessage): Promise<Message> {
+    const id = this.currentId++;
+    const message: Message = { ...insertMessage, id };
+    this.messages.set(id, message);
+    return message;
   }
 }
 
