@@ -124,48 +124,57 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/parse-checklist", async (req, res) => {
+  app.post("/api/parse-checklist", (req, res) => {
     try {
       const { text } = req.body;
       if (!text || text.trim().length < 5) {
         return res.status(400).json({ error: "No text provided." });
       }
-      const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": process.env.ANTHROPIC_API_KEY || "",
-          "anthropic-version": "2023-06-01",
-        },
-        body: JSON.stringify({
-          model: "claude-haiku-4-5-20251001",
-          max_tokens: 4096,
-          messages: [
-            {
-              role: "user",
-              content: "You are a sports card checklist parser. Extract every card from the text below.\n\nReturn ONLY a valid JSON array. No explanation, no markdown, no code blocks — just the raw JSON array.\n\nEach item must have:\n- \"card_number\": the card number as a string, or \"\" if not present\n- \"player\": the player or subject name as a string\n\nExample output:\n[{\"card_number\":\"1\",\"player\":\"Patrick Mahomes\"},{\"card_number\":\"2\",\"player\":\"Josh Allen\"}]\n\nText to parse:\n" + text.slice(0, 8000),
-            },
-          ],
-        }),
-      });
-      const anthropicData = await anthropicRes.json();
-      const raw = anthropicData?.content?.[0]?.text || "";
-      const cleaned = raw.replace(/```json|```/g, "").trim();
-      let parsed: { card_number: string; player: string }[] = [];
-      try {
-        parsed = JSON.parse(cleaned);
-      } catch {
-        return res.status(422).json({ error: "Could not parse the checklist. Try cleaning up the text." });
+
+      const lines = text.split("\n").map((l: string) => l.trim()).filter((l: string) => l.length > 0);
+      const cards: { card_number: string; player: string }[] = [];
+
+      for (const line of lines) {
+        if (/^(checklist|set|base|insert|parallel|card#|card number|player|name|#)$/i.test(line)) continue;
+        if (line.length < 2) continue;
+
+        const withNumber = line.match(/^#?(\d+)[\.\s\-\)]+(.+)$/);
+        if (withNumber) {
+          const player = withNumber[2]
+            .replace(/\b(rc|rookie|sp|ssp|auto|patch|refractor|prizm|chrome|base|card)\b/gi, "")
+            .replace(/\s+/g, " ")
+            .trim();
+          if (player.length > 1) {
+            cards.push({ card_number: withNumber[1], player });
+            continue;
+          }
+        }
+
+        const numberAtEnd = line.match(/^(.+?)\s+#?(\d+)$/);
+        if (numberAtEnd) {
+          const player = numberAtEnd[1]
+            .replace(/\b(rc|rookie|sp|ssp|auto|patch|refractor|prizm|chrome|base|card)\b/gi, "")
+            .replace(/\s+/g, " ")
+            .trim();
+          if (player.length > 1) {
+            cards.push({ card_number: numberAtEnd[2], player });
+            continue;
+          }
+        }
+
+        const clean = line
+          .replace(/\b(rc|rookie|sp|ssp|auto|patch|refractor|prizm|chrome|base|card)\b/gi, "")
+          .replace(/\s+/g, " ")
+          .trim();
+        if (clean.length > 2 && /[a-zA-Z]/.test(clean)) {
+          cards.push({ card_number: "", player: clean });
+        }
       }
-      if (!Array.isArray(parsed) || parsed.length === 0) {
-        return res.status(422).json({ error: "No cards found in the pasted text." });
+
+      if (cards.length === 0) {
+        return res.status(422).json({ error: "No cards found. Make sure each card is on its own line." });
       }
-      const cards = parsed
-        .filter((c) => c.player && c.player.trim().length > 0)
-        .map((c) => ({
-          card_number: (c.card_number || "").toString().trim(),
-          player: c.player.trim(),
-        }));
+
       res.json({ cards, count: cards.length });
     } catch (err) {
       console.error("Checklist parse error:", err);
