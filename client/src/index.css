@@ -37,7 +37,7 @@
   --shadow-raised:  0 2px 8px rgba(3,8,20,0.6), 0 8px 32px rgba(3,8,20,0.5);
   --shadow-gold:    0 4px 24px rgba(201,168,76,0.20);
   --inner-glow:     inset 0 1px 0 rgba(99,140,190,0.12);
-  --modal-bg:       #1E2E45;
+  --modal-bg:       #0C1828;
 }
 
 [data-theme="light"] {
@@ -73,7 +73,7 @@
   --shadow-raised:  0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.08);
   --shadow-gold:    0 4px 20px rgba(154,104,32,0.18);
   --inner-glow:     inset 0 1px 0 rgba(255,255,255,0.80);
-  --modal-bg:       #FDFCF9;
+  --modal-bg:       #0C1828;
 }
 
 body {
