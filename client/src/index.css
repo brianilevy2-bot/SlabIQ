@@ -20,6 +20,7 @@
   --text-primary: #F0EAD6;
   --text-secondary: #A89060;
   --text-muted: #4A4030;
+  --nav-bg: rgba(8,8,8,0.92);
 }
 
 body {
@@ -127,3 +128,34 @@ body {
 .grade-blue  { background: rgba(77,158,255,0.1);        color: #4D9EFF;       border: 1px solid rgba(77,158,255,0.2); }
 .grade-green { background: rgba(62,207,142,0.1);        color: var(--green);  border: 1px solid rgba(62,207,142,0.2); }
 .grade-raw   { background: rgba(74,64,48,0.4);          color: #6A5A40;       border: 1px solid rgba(74,64,48,0.4); }
+/* ── Light mode ─────────────────────────────────────── */
+[data-theme="light"] {
+  --bg-primary: #F5F0E8;
+  --bg-card: rgba(0, 0, 0, 0.04);
+  --bg-card-hover: rgba(0, 0, 0, 0.07);
+  --bg-elevated: #EDE8DC;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(180, 120, 20, 0.35);
+  --gold: #A07010;
+  --gold-light: #C89020;
+  --gold-dim: rgba(160, 112, 16, 0.12);
+  --gold-border: rgba(160, 112, 16, 0.3);
+  --amber: #8B5E10;
+  --green: #1A7A4A;
+  --red: #C0263A;
+  --text-primary: #1A1410;
+  --text-secondary: #6B4E20;
+  --text-muted: #A08060;
+  --nav-bg: rgba(245, 240, 232, 0.92);
+}
+
+[data-theme="light"] .grid-bg {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+[data-theme="light"] .glass-card {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
