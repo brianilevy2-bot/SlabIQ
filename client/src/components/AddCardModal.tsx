@@ -88,7 +88,7 @@ export default function AddCardModal({ card, onSave, onClose }: Props) {
     >
       <div
         className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-xl"
-        style={{ background: "#0e0e0e", border: "1px solid var(--border-subtle)" }}
+        style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}
       >
         {/* Header */}
         <div
