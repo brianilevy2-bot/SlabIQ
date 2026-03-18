@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 const GRADES = ["Raw","PSA 1","PSA 2","PSA 3","PSA 4","PSA 5","PSA 6","PSA 7","PSA 8","PSA 9","PSA 10","BGS 9","BGS 9.5","BGS 10","SGC 9","SGC 10"];
 
@@ -81,7 +82,7 @@ export default function AddCardModal({ card, onSave, onClose }: Props) {
     });
   }
 
-  return (
+  return createPortal(
     <div
       style={{
         position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
@@ -289,6 +290,7 @@ export default function AddCardModal({ card, onSave, onClose }: Props) {
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
