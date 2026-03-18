@@ -84,11 +84,11 @@ export default function AddCardModal({ card, onSave, onClose }: Props) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-[20vh]"
-      style={{ background: "transparent" }}
+      style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)" }}
     >
       <div
         className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-xl"
-        style={{ background: "var(--modal-bg)", border: "1px solid var(--border-strong)" }}
+        style={{ background: "var(--bg-raised)", border: "1px solid var(--border-mid)" }}
       >
         {/* Header */}
         <div
@@ -169,7 +169,7 @@ export default function AddCardModal({ card, onSave, onClose }: Props) {
                     className="w-full flex items-center gap-3 px-3 py-2.5 text-left transition"
                     style={{
                       borderBottom: i < searchResults.length - 1 ? "1px solid var(--border-subtle)" : "none",
-                      background: "transparent",
+                      background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)",
                     }}
                     onMouseEnter={e => (e.currentTarget.style.background = "var(--gold-dim)")}
                     onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
@@ -273,7 +273,7 @@ export default function AddCardModal({ card, onSave, onClose }: Props) {
                 type="button"
                 onClick={!isEditing ? () => setMode("search") : onClose}
                 className="flex-1 py-2.5 rounded-lg text-sm font-medium transition"
-                style={{ border: "1px solid var(--border-subtle)", color: "var(--text-muted)", background: "transparent" }}
+                style={{ border: "1px solid var(--border-subtle)", color: "var(--text-muted)", background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)" }}
                 onMouseEnter={e => (e.currentTarget.style.borderColor = "var(--gold-border)")}
                 onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border-subtle)")}
               >
