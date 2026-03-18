@@ -83,8 +83,11 @@ export default function AddCardModal({ card, onSave, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-[999] flex items-center justify-center px-4"
-      style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)" }}
+      style={{
+        position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+        zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "0 16px", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)"
+      }}
     >
       <div
         className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-xl"
