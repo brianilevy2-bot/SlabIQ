@@ -160,7 +160,7 @@ body {
 .btn-gold:hover { opacity: 0.88; transform: translateY(-1px); }
 .btn-gold:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
 
-::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar { width: 0px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 99px; }
 
