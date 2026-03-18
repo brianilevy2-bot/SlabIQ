@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
@@ -680,11 +681,14 @@ function CardRow({ card, onToggle, onDelete }: { card: SetCard; onToggle: () => 
 function Modal({ title, subtitle, onClose, children }: {
   title: string; subtitle?: string; onClose: () => void; children: React.ReactNode;
 }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(12px)" }}>
+  return createPortal(
+    <div style={{
+        position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+        zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "0 16px", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)"
+      }}>
       <div className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-xl"
-        style={{ background: "#0e0e0e", border: "1px solid var(--border-subtle)" }}>
+        style={{ background: "var(--bg-raised)", border: "1px solid var(--border-mid)" }}>
         <div className="flex items-center justify-between px-6 py-5"
           style={{ borderBottom: "1px solid var(--border-subtle)" }}>
           <div>
@@ -699,7 +703,8 @@ function Modal({ title, subtitle, onClose, children }: {
         </div>
         <div className="px-6 py-5">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
