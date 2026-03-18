@@ -88,7 +88,7 @@ export default function AddCardModal({ card, onSave, onClose }: Props) {
     >
       <div
         className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-xl"
-        style={{ background: "var(--bg-raised)", border: "1px solid var(--border-subtle)" }}
+        style={{ background: "var(--bg-raised)", border: "1px solid var(--border-mid)" }}
       >
         {/* Header */}
         <div
@@ -119,7 +119,7 @@ export default function AddCardModal({ card, onSave, onClose }: Props) {
           <div className="px-6 pt-5">
             <div
               className="flex rounded-lg p-0.5 gap-0.5"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid var(--border-subtle)" }}
+              style={{ background: "var(--bg-subtle)", border: "1px solid var(--border-subtle)" }}
             >
               {(["search", "manual"] as const).map(m => (
                 <button
