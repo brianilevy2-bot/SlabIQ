@@ -84,7 +84,7 @@ export default function AddCardModal({ card, onSave, onClose }: Props) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(12px)" }}
+      style={{ background: "rgba(7,16,31,0.85)", backdropFilter: "blur(20px)" }}
     >
       <div
         className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-xl"
