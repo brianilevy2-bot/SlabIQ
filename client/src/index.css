@@ -85,7 +85,7 @@ body {
 .serif { font-family: 'Sora', system-ui, sans-serif; }
 
 .glass-card {
-  background: var(--bg-card);
+  background: var(--bg-raised);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
   box-shadow: var(--shadow), var(--inner-glow);
