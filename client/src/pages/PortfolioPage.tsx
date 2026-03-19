@@ -37,7 +37,7 @@ interface NewCard {
 
 function getGradeBadgeClass(grade: string) {
   if (grade === "Raw") return "grade-raw";
-  if (grade.includes("10"))  return "grade-gold";
+  if (grade.includes("10")) return "grade-gold";
   if (grade.includes("9.5") || grade.includes("9")) return "grade-blue";
   return "grade-green";
 }
@@ -56,9 +56,7 @@ export default function PortfolioPage() {
   async function fetchCards() {
     setLoading(true);
     const { data, error } = await supabase
-      .from("portfolio_cards")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .from("portfolio_cards").select("*").order("created_at", { ascending: false });
     if (error) console.error(error);
     else setCards(data || []);
     setLoading(false);
@@ -100,257 +98,236 @@ export default function PortfolioPage() {
   const topCards = [...cards].sort((a, b) => Number(b.price_paid) - Number(a.price_paid)).slice(0, 3);
 
   return (
-    <div className="space-y-5 animate-fade-up">
+    <div className="animate-fade-up" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
 
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      {/* ── Header ───────────────────────────────────────── */}
+      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12 }}>
         <div>
-          <h1 className="serif text-2xl md:text-3xl font-semibold tracking-wide" style={{ color: "var(--text-primary)" }}>
-            My Portfolio
-          </h1>
-          <p className="mono text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-            {cards.length} / {FREE_CARD_LIMIT} free slots
-          </p>
+          <h1 style={{
+            fontFamily: "'Sora', sans-serif", fontSize: 28, fontWeight: 700,
+            letterSpacing: "-0.03em", color: "var(--text-primary)", lineHeight: 1, marginBottom: 6,
+          }}>My Portfolio</h1>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{
+              fontFamily: "'Inter Tight', monospace", fontSize: 12,
+              color: "var(--text-secondary)",
+            }}>{cards.length} / {FREE_CARD_LIMIT} cards</span>
+            <span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--text-muted)", display: "inline-block" }} />
+            <span style={{
+              fontFamily: "'Inter Tight', monospace", fontSize: 12, color: "var(--text-muted)",
+            }}>Free tier</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex rounded-md p-0.5 gap-0.5"
-            style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{
+            display: "flex", background: "var(--bg-subtle)", borderRadius: 8,
+            padding: 2, border: "1px solid var(--border-subtle)", gap: 1,
+          }}>
             {(["grid", "list"] as const).map(v => (
-              <button key={v} onClick={() => setViewMode(v)}
-                className="px-2.5 py-1 rounded text-xs font-medium transition capitalize"
-                style={{
-                  background: viewMode === v ? "var(--gold-dim)" : "transparent",
-                  color:      viewMode === v ? "var(--gold)"     : "var(--text-muted)",
-                  border:     viewMode === v ? "1px solid var(--gold-border)" : "1px solid transparent",
-                }}>
-                {v}
-              </button>
+              <button key={v} onClick={() => setViewMode(v)} style={{
+                padding: "5px 12px", borderRadius: 6, border: "none", cursor: "pointer",
+                fontFamily: "'Sora', sans-serif", fontSize: 12, fontWeight: 500,
+                background: viewMode === v ? "var(--bg-raised)" : "transparent",
+                color: viewMode === v ? "var(--text-primary)" : "var(--text-muted)",
+                boxShadow: viewMode === v ? "var(--shadow)" : "none",
+                transition: "all 0.15s", textTransform: "capitalize",
+              }}>{v}</button>
             ))}
           </div>
-          <button onClick={() => setShowAddModal(true)} disabled={isAtLimit}
-            className="btn-gold px-3 py-2 text-xs md:px-4 md:text-sm">
+          <button onClick={() => setShowAddModal(true)} disabled={isAtLimit} className="btn-gold"
+            style={{ padding: "8px 18px", fontSize: 13 }}>
             + Add Card
           </button>
         </div>
       </div>
 
-      {/* Stats — 2 cols on mobile, 4 on desktop */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {[
-          { label: "Total Invested", value: `$${totalPaid.toFixed(2)}`,  sub: `${cards.length} cards`, accent: false },
-          { label: "Current Value",  value: hasValues ? `$${totalValue.toFixed(2)}` : "—", sub: hasValues ? "tracked value" : "add values", accent: true },
-          {
-            label: "P&L",
-            value: totalPL != null ? `${plPositive ? "+" : ""}$${Math.abs(totalPL).toFixed(2)}` : "—",
-            sub:   totalPL != null ? (plPositive ? "unrealized gain" : "unrealized loss") : "no values yet",
-            accent: false,
-            plColor: totalPL != null ? (plPositive ? "var(--green)" : "var(--red)") : undefined,
-          },
-          { label: "Avg Cost", value: `$${avgCost.toFixed(2)}`, sub: "per card", accent: false },
-        ].map((stat, i) => (
-          <div key={i} className="glass-card px-3 py-3 md:px-4 md:py-4">
-            <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>
-              {stat.label}
-            </p>
-            <p className="mono text-lg md:text-xl font-medium"
-              style={{ color: (stat as any).plColor ?? (stat.accent ? "var(--gold)" : "var(--text-primary)") }}>
-              {stat.value}
-            </p>
-            <p className="text-[11px] mt-1" style={{ color: "var(--text-muted)" }}>{stat.sub}</p>
-          </div>
-        ))}
+      {/* ── KPI Row ───────────────────────────────────────── */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+        <div style={{
+          background: "var(--bg-card)", border: "1px solid var(--border-subtle)",
+          borderRadius: 12, padding: "16px 18px", boxShadow: "var(--shadow)",
+        }}>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Sora', sans-serif", fontWeight: 500 }}>Total Invested</p>
+          <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 20, fontWeight: 600, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>${totalPaid.toFixed(2)}</p>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4, fontFamily: "'Inter Tight', monospace" }}>{cards.length} cards</p>
+        </div>
+
+        <div style={{
+          background: "var(--bg-card)", border: "1px solid var(--border-subtle)",
+          borderRadius: 12, padding: "16px 18px", boxShadow: "var(--shadow)",
+        }}>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Sora', sans-serif", fontWeight: 500 }}>Current Value</p>
+          <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 20, fontWeight: 600, color: "var(--gold)", letterSpacing: "-0.02em" }}>{hasValues ? `$${totalValue.toFixed(2)}` : "—"}</p>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4, fontFamily: "'Inter Tight', monospace" }}>{hasValues ? "tracked value" : "add values to track"}</p>
+        </div>
+
+        <div style={{
+          background: totalPL != null ? plPositive ? "rgba(46,204,138,0.06)" : "rgba(232,80,106,0.06)" : "var(--bg-card)",
+          border: `1px solid ${totalPL != null ? plPositive ? "var(--green-border)" : "var(--red-border)" : "var(--border-subtle)"}`,
+          borderRadius: 12, padding: "16px 18px", boxShadow: "var(--shadow)",
+        }}>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Sora', sans-serif", fontWeight: 500 }}>P&L</p>
+          <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 22, fontWeight: 700, letterSpacing: "-0.02em", color: totalPL != null ? plPositive ? "var(--green)" : "var(--red)" : "var(--text-muted)" }}>
+            {totalPL != null ? `${plPositive ? "+" : ""}$${Math.abs(totalPL).toFixed(2)}` : "—"}
+          </p>
+          <p style={{ fontSize: 11, marginTop: 4, fontFamily: "'Inter Tight', monospace", color: totalPL != null ? plPositive ? "var(--green)" : "var(--red)" : "var(--text-muted)", opacity: 0.7 }}>
+            {totalPL != null ? plPositive ? "unrealized gain" : "unrealized loss" : "no values yet"}
+          </p>
+        </div>
+
+        <div style={{
+          background: "var(--bg-card)", border: "1px solid var(--border-subtle)",
+          borderRadius: 12, padding: "16px 18px", boxShadow: "var(--shadow)",
+        }}>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Sora', sans-serif", fontWeight: 500 }}>Avg Cost</p>
+          <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 20, fontWeight: 600, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>${avgCost.toFixed(2)}</p>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4, fontFamily: "'Inter Tight', monospace" }}>per card</p>
+        </div>
       </div>
 
-      {/* Grade breakdown + Top holdings */}
+      {/* ── Grade Breakdown + Top Holdings ───────────────── */}
       {cards.length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="glass-card p-4 md:p-5">
-            <p className="text-[10px] uppercase tracking-widest mb-4" style={{ color: "var(--text-muted)" }}>
-              — Grade Breakdown
-            </p>
-            <div className="space-y-3">
-              {sortedGrades.map(([grade, count]) => (
-                <div key={grade} className="flex items-center gap-3">
-                  <span className={`grade-badge ${getGradeBadgeClass(grade)} w-16 justify-center shrink-0`}>
-                    {grade}
-                  </span>
-                  <div className="flex-1 h-1.5 rounded-full overflow-hidden"
-                    style={{ background: "rgba(255,255,255,0.05)" }}>
-                    <div className="h-full rounded-full"
-                      style={{
-                        width: `${(count / cards.length) * 100}%`,
-                        background: grade === "Raw" ? "rgba(100,80,50,0.6)" : "linear-gradient(90deg, var(--amber), var(--gold))",
-                      }} />
-                  </div>
-                  <span className="mono text-xs w-5 text-right" style={{ color: "var(--text-muted)" }}>{count}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="glass-card p-4 md:p-5">
-            <p className="text-[10px] uppercase tracking-widest mb-4" style={{ color: "var(--text-muted)" }}>
-              — Top Holdings
-            </p>
-            <div className="space-y-0">
-              {topCards.map((card, i) => {
-                const pl = card.current_value != null ? Number(card.current_value) - Number(card.price_paid) : null;
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: 12, padding: "18px 20px", boxShadow: "var(--shadow)" }}>
+            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginBottom: 16, fontFamily: "'Sora', sans-serif" }}>Grade Breakdown</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {sortedGrades.map(([grade, count]) => {
+                const pct = (count / cards.length) * 100;
                 return (
-                  <div key={card.id} className="flex items-center gap-3 py-3"
-                    style={{ borderBottom: i < topCards.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
-                    <span className="mono text-xs w-5 shrink-0 text-center"
-                      style={{ color: ["var(--gold)", "#94a3b8", "#b45309"][i] }}>{i + 1}</span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold truncate">{card.player}</p>
-                      <p className="mono text-[11px] truncate" style={{ color: "var(--text-muted)" }}>
-                        {card.year} {card.set_name}
-                      </p>
+                  <div key={grade}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5, alignItems: "center" }}>
+                      <span style={{ fontFamily: "'Sora', sans-serif", fontSize: 12, color: "var(--text-secondary)", fontWeight: 500 }}>{grade}</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <span style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: "var(--text-muted)" }}>{count} card{count !== 1 ? "s" : ""}</span>
+                        <span style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: "var(--text-secondary)", minWidth: 32, textAlign: "right" }}>{Math.round(pct)}%</span>
+                      </div>
                     </div>
-                    <span className={`grade-badge ${getGradeBadgeClass(card.grade)} shrink-0`}>{card.grade}</span>
-                    <div className="text-right shrink-0">
-                      <p className="mono text-sm">${Number(card.price_paid).toFixed(2)}</p>
-                      {pl != null && (
-                        <p className="mono text-[11px]" style={{ color: pl >= 0 ? "var(--green)" : "var(--red)" }}>
-                          {pl >= 0 ? "+" : ""}${pl.toFixed(2)}
-                        </p>
-                      )}
+                    <div style={{ height: 4, background: "var(--bg-subtle)", borderRadius: 99, overflow: "hidden" }}>
+                      <div style={{
+                        height: "100%", borderRadius: 99, width: `${pct}%`, transition: "width 0.5s",
+                        background: grade === "Raw" ? "var(--border-mid)" : grade.includes("10") ? "linear-gradient(90deg, var(--amber), var(--gold))" : "var(--blue)",
+                      }} />
                     </div>
                   </div>
                 );
               })}
             </div>
           </div>
+
+          <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: 12, padding: "18px 20px", boxShadow: "var(--shadow)" }}>
+            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginBottom: 16, fontFamily: "'Sora', sans-serif" }}>Top Holdings</p>
+            {topCards.map((card, i) => {
+              const pl = card.current_value != null ? Number(card.current_value) - Number(card.price_paid) : null;
+              const rankColors = ["var(--gold)", "var(--text-secondary)", "var(--text-muted)"];
+              return (
+                <div key={card.id} style={{ display: "flex", alignItems: "center", gap: 12, paddingBottom: 12, marginBottom: 12, borderBottom: i < topCards.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
+                  <span style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, fontWeight: 600, color: rankColors[i], width: 16, flexShrink: 0, textAlign: "center" }}>{i + 1}</span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontFamily: "'Sora', sans-serif", fontSize: 13, fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{card.player}</p>
+                    <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: "var(--text-muted)", marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{card.year} · {card.set_name}</p>
+                  </div>
+                  <span className={`grade-badge ${getGradeBadgeClass(card.grade)}`} style={{ flexShrink: 0 }}>{card.grade}</span>
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>${Number(card.price_paid).toFixed(2)}</p>
+                    {pl != null && <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: pl >= 0 ? "var(--green)" : "var(--red)", marginTop: 1 }}>{pl >= 0 ? "+" : ""}${pl.toFixed(2)}</p>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 
+      {/* ── Limit Banner ──────────────────────────────────── */}
       {isAtLimit && (
-        <div className="rounded-lg px-4 py-3 text-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2"
-          style={{ background: "rgba(212,175,55,0.06)", border: "1px solid var(--gold-border)", color: "var(--gold)" }}>
-          <span>You've hit the 20-card free limit.</span>
-          <button className="btn-gold px-3 py-1 text-xs shrink-0">Upgrade to Pro — $4.99/mo</button>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "12px 16px", borderRadius: 10, background: "var(--gold-dim)", border: "1px solid var(--gold-border)" }}>
+          <span style={{ fontSize: 13, color: "var(--gold)", fontFamily: "'Sora', sans-serif" }}>You've reached the 20-card free limit.</span>
+          <button className="btn-gold" style={{ padding: "6px 14px", fontSize: 12, flexShrink: 0 }}>Upgrade to Pro — $4.99/mo</button>
         </div>
       )}
 
-      <hr className="gold-rule" />
+      {/* ── Divider ───────────────────────────────────────── */}
+      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <span style={{ fontFamily: "'Sora', sans-serif", fontSize: 12, fontWeight: 600, color: "var(--text-muted)", whiteSpace: "nowrap" }}>Collection</span>
+        <div style={{ flex: 1, height: 1, background: "var(--border-subtle)" }} />
+      </div>
 
-      {/* Collection */}
+      {/* ── Collection ───────────────────────────────────── */}
       {loading ? (
-        <div className="text-center py-16 mono text-sm" style={{ color: "var(--text-muted)" }}>
-          Loading collection...
-        </div>
+        <div style={{ textAlign: "center", padding: "48px 0", fontFamily: "'Inter Tight', monospace", fontSize: 13, color: "var(--text-muted)" }}>Loading...</div>
       ) : cards.length === 0 ? (
-        <div className="text-center py-20 rounded-xl"
-          style={{ border: "1px dashed rgba(212,175,55,0.15)", background: "rgba(212,175,55,0.02)" }}>
-          <div className="text-4xl mb-4 opacity-40">◈</div>
-          <p className="serif text-xl font-semibold mb-1">Start Your Collection</p>
-          <p className="text-sm mb-6" style={{ color: "var(--text-muted)" }}>Add your first card to begin tracking</p>
-          <button onClick={() => setShowAddModal(true)} className="btn-gold px-6 py-2.5 text-sm">
-            + Add First Card
-          </button>
+        <div style={{ textAlign: "center", padding: "64px 24px", borderRadius: 12, border: "1px dashed var(--border-mid)", background: "var(--gold-dim)" }}>
+          <p style={{ fontFamily: "'Sora', sans-serif", fontSize: 18, fontWeight: 600, color: "var(--text-primary)", marginBottom: 8 }}>Start your collection</p>
+          <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 20 }}>Add your first card to begin tracking</p>
+          <button onClick={() => setShowAddModal(true)} className="btn-gold" style={{ padding: "10px 24px", fontSize: 13 }}>+ Add First Card</button>
         </div>
       ) : viewMode === "grid" ? (
-        <>
-          <p className="text-[10px] uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>— Collection</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            {cards.map((card) => {
-              const pl = card.current_value != null ? Number(card.current_value) - Number(card.price_paid) : null;
-              return (
-                <div key={card.id} className="glass-card overflow-hidden group relative cursor-default"
-                  style={{ borderRadius: "10px" }}>
-                  <div className="h-1.5 w-full"
-                    style={{ background: card.grade === "Raw" ? "rgba(100,80,50,0.5)" : "linear-gradient(90deg, var(--amber), var(--gold))" }} />
-                  <div className="p-3">
-                    <div className="flex items-start justify-between gap-1 mb-2">
-                      <p className="font-bold text-sm leading-tight truncate flex-1">{card.player}</p>
-                      <span className={`grade-badge ${getGradeBadgeClass(card.grade)} shrink-0`}>{card.grade}</span>
-                    </div>
-                    <p className="mono text-[11px] truncate mb-3" style={{ color: "var(--text-muted)" }}>
-                      {card.year} {card.set_name}
-                      {card.card_number ? ` #${card.card_number}` : ""}
-                      {card.variation ? ` · ${card.variation}` : ""}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <p className="mono text-sm font-medium">${Number(card.price_paid).toFixed(2)}</p>
-                      {pl != null && (
-                        <p className="mono text-[11px]" style={{ color: pl >= 0 ? "var(--green)" : "var(--red)" }}>
-                          {pl >= 0 ? "+" : ""}${pl.toFixed(2)}
-                        </p>
-                      )}
-                    </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 10 }}>
+          {cards.map((card) => {
+            const pl = card.current_value != null ? Number(card.current_value) - Number(card.price_paid) : null;
+            return (
+              <div key={card.id} style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: 10, overflow: "hidden", position: "relative", cursor: "default", transition: "border-color 0.15s, box-shadow 0.15s", boxShadow: "var(--shadow)" }}
+                className="group"
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border-mid)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border-subtle)"; }}
+              >
+                <div style={{ height: 3, width: "100%", background: card.grade === "Raw" ? "var(--border-mid)" : card.grade.includes("10") ? "linear-gradient(90deg, var(--amber), var(--gold))" : "var(--blue)" }} />
+                <div style={{ padding: "12px 13px" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 6, marginBottom: 6 }}>
+                    <p style={{ fontFamily: "'Sora', sans-serif", fontSize: 13, fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{card.player}</p>
+                    <span className={`grade-badge ${getGradeBadgeClass(card.grade)}`} style={{ flexShrink: 0 }}>{card.grade}</span>
                   </div>
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-2"
-                    style={{ background: "rgba(8,8,8,0.82)", backdropFilter: "blur(4px)" }}>
-                    <button onClick={() => setEditingCard(card)}
-                      className="px-3 py-1.5 rounded-md text-xs font-medium transition"
-                      style={{ background: "var(--gold-dim)", color: "var(--gold)", border: "1px solid var(--gold-border)" }}>
-                      Edit
-                    </button>
-                    <button onClick={() => { if (confirm("Remove this card?")) deleteCard(card.id); }}
-                      className="px-3 py-1.5 rounded-md text-xs font-medium transition"
-                      style={{ background: "rgba(255,77,109,0.12)", color: "var(--red)", border: "1px solid rgba(255,77,109,0.25)" }}>
-                      Delete
-                    </button>
+                  <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: "var(--text-muted)", marginBottom: 12, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {card.year} {card.set_name}{card.card_number ? ` #${card.card_number}` : ""}{card.variation ? ` · ${card.variation}` : ""}
+                  </p>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>${Number(card.price_paid).toFixed(2)}</p>
+                    {pl != null && <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: pl >= 0 ? "var(--green)" : "var(--red)" }}>{pl >= 0 ? "+" : ""}${pl.toFixed(2)}</p>}
                   </div>
                 </div>
-              );
-            })}
-            <button onClick={() => setShowAddModal(true)}
-              className="rounded-xl flex flex-col items-center justify-center gap-1 py-8 transition"
-              style={{ border: "1px dashed rgba(212,175,55,0.18)", background: "rgba(212,175,55,0.02)", color: "var(--text-muted)" }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(212,175,55,0.4)")}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(212,175,55,0.18)")}>
-              <span className="text-xl">+</span>
-              <span className="text-[11px] tracking-wide uppercase">Add Card</span>
-            </button>
-          </div>
-        </>
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-2"
+                  style={{ background: "rgba(7,16,31,0.88)", backdropFilter: "blur(4px)" }}>
+                  <button onClick={() => setEditingCard(card)} style={{ padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 500, cursor: "pointer", fontFamily: "'Sora', sans-serif", background: "var(--gold-dim)", color: "var(--gold)", border: "1px solid var(--gold-border)" }}>Edit</button>
+                  <button onClick={() => { if (confirm("Remove this card?")) deleteCard(card.id); }} style={{ padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 500, cursor: "pointer", fontFamily: "'Sora', sans-serif", background: "var(--red-dim)", color: "var(--red)", border: "1px solid var(--red-border)" }}>Delete</button>
+                </div>
+              </div>
+            );
+          })}
+          <button onClick={() => setShowAddModal(true)} style={{ borderRadius: 10, border: "1px dashed var(--border-mid)", background: "transparent", color: "var(--text-muted)", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, padding: "32px 0", transition: "all 0.15s", fontFamily: "'Sora', sans-serif" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--gold-border)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--gold)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border-mid)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--text-muted)"; }}
+          >
+            <span style={{ fontSize: 20, lineHeight: 1 }}>+</span>
+            <span style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.05em" }}>Add Card</span>
+          </button>
+        </div>
       ) : (
-        <>
-          <p className="text-[10px] uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>— Collection</p>
-          <div className="space-y-1.5">
-            {cards.map((card) => {
-              const pl = card.current_value != null ? Number(card.current_value) - Number(card.price_paid) : null;
-              return (
-                <div key={card.id} className="glass-card flex items-center gap-3 px-3 py-3 md:px-4 group">
-                  <div className="w-1 self-stretch rounded-full shrink-0"
-                    style={{ background: card.grade === "Raw" ? "rgba(100,80,50,0.5)" : "linear-gradient(180deg, var(--gold), var(--amber))" }} />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm truncate">{card.player}</p>
-                    <p className="mono text-[11px] truncate" style={{ color: "var(--text-muted)" }}>
-                      {card.year} {card.set_name}
-                      {card.card_number ? ` #${card.card_number}` : ""}
-                    </p>
-                  </div>
-                  <span className={`grade-badge ${getGradeBadgeClass(card.grade)} shrink-0 hidden sm:inline-flex`}>
-                    {card.grade}
-                  </span>
-                  <div className="text-right shrink-0">
-                    <p className="mono text-sm">${Number(card.price_paid).toFixed(2)}</p>
-                    {pl != null ? (
-                      <p className="mono text-[11px]" style={{ color: pl >= 0 ? "var(--green)" : "var(--red)" }}>
-                        {pl >= 0 ? "+" : ""}${pl.toFixed(2)}
-                      </p>
-                    ) : (
-                      <p className="mono text-[11px]" style={{ color: "var(--text-muted)" }}>—</p>
-                    )}
-                  </div>
-                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition shrink-0">
-                    <button onClick={() => setEditingCard(card)}
-                      className="px-2 py-1.5 rounded-md text-xs transition"
-                      style={{ background: "var(--gold-dim)", color: "var(--gold)", border: "1px solid var(--gold-border)" }}>
-                      Edit
-                    </button>
-                    <button onClick={() => { if (confirm("Remove this card?")) deleteCard(card.id); }}
-                      className="px-2 py-1.5 rounded-md text-xs transition"
-                      style={{ background: "rgba(255,77,109,0.1)", color: "var(--red)", border: "1px solid rgba(255,77,109,0.2)" }}>
-                      Del
-                    </button>
-                  </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {cards.map((card) => {
+            const pl = card.current_value != null ? Number(card.current_value) - Number(card.price_paid) : null;
+            return (
+              <div key={card.id} className="group" style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 10, background: "var(--bg-card)", border: "1px solid var(--border-subtle)", transition: "border-color 0.15s" }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = "var(--border-mid)")}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border-subtle)")}
+              >
+                <div style={{ width: 3, alignSelf: "stretch", borderRadius: 99, flexShrink: 0, background: card.grade === "Raw" ? "var(--border-mid)" : card.grade.includes("10") ? "linear-gradient(180deg, var(--gold), var(--amber))" : "var(--blue)" }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontFamily: "'Sora', sans-serif", fontSize: 13, fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{card.player}</p>
+                  <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: "var(--text-muted)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{card.year} {card.set_name}{card.card_number ? ` #${card.card_number}` : ""}</p>
                 </div>
-              );
-            })}
-          </div>
-        </>
+                <span className={`grade-badge ${getGradeBadgeClass(card.grade)}`} style={{ flexShrink: 0 }}>{card.grade}</span>
+                <div style={{ textAlign: "right", flexShrink: 0 }}>
+                  <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>${Number(card.price_paid).toFixed(2)}</p>
+                  <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, marginTop: 1, color: pl != null ? pl >= 0 ? "var(--green)" : "var(--red)" : "var(--text-muted)" }}>{pl != null ? `${pl >= 0 ? "+" : ""}$${pl.toFixed(2)}` : "—"}</p>
+                </div>
+                <div className="opacity-0 group-hover:opacity-100 transition" style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                  <button onClick={() => setEditingCard(card)} style={{ padding: "5px 10px", borderRadius: 7, fontSize: 11, cursor: "pointer", fontFamily: "'Sora', sans-serif", fontWeight: 500, background: "var(--gold-dim)", color: "var(--gold)", border: "1px solid var(--gold-border)" }}>Edit</button>
+                  <button onClick={() => { if (confirm("Remove this card?")) deleteCard(card.id); }} style={{ padding: "5px 10px", borderRadius: 7, fontSize: 11, cursor: "pointer", fontFamily: "'Sora', sans-serif", fontWeight: 500, background: "var(--red-dim)", color: "var(--red)", border: "1px solid var(--red-border)" }}>Del</button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
 
       {(showAddModal || editingCard) && (
