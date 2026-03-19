@@ -57,12 +57,12 @@ export default function AuthPage() {
             <span style={{ fontFamily: "'Inter Tight', monospace", fontSize: 13, fontWeight: 600, color: "#180E00" }}>SQ</span>
           </div>
           <h1 style={{
-            fontFamily: "'Sora', sans-serif", fontSize: 26, fontWeight: 700,
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 26, fontWeight: 700,
             letterSpacing: "-0.03em", color: "var(--text-primary)", marginBottom: 6,
           }}>
             Slab<span className="gold-text">IQ</span>
           </h1>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", fontFamily: "'Sora', sans-serif" }}>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
             Sports card portfolio intelligence
           </p>
         </div>
@@ -77,7 +77,7 @@ export default function AuthPage() {
               <button key={label} onClick={() => { setIsLogin(label === "Log In"); setError(""); setMessage(""); }}
                 style={{
                   flex: 1, padding: "7px 0", borderRadius: 99, border: "none", cursor: "pointer",
-                  fontFamily: "'Sora', sans-serif", fontSize: 13, fontWeight: 600,
+                  fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 13, fontWeight: 600,
                   background: active ? "var(--bg-raised)" : "transparent",
                   color: active ? "var(--text-primary)" : "var(--text-secondary)",
                   boxShadow: active ? "var(--shadow)" : "none",
@@ -97,7 +97,7 @@ export default function AuthPage() {
               <label style={{
                 display: "block", fontSize: 10, fontWeight: 600, letterSpacing: "0.11em",
                 color: "var(--text-muted)", marginBottom: 7, textTransform: "uppercase",
-                fontFamily: "'Sora', sans-serif",
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
               }}>Email</label>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                 required placeholder="you@email.com" className="input-sleek" />
@@ -106,7 +106,7 @@ export default function AuthPage() {
               <label style={{
                 display: "block", fontSize: 10, fontWeight: 600, letterSpacing: "0.11em",
                 color: "var(--text-muted)", marginBottom: 7, textTransform: "uppercase",
-                fontFamily: "'Sora', sans-serif",
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
               }}>Password</label>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)}
                 required minLength={6} placeholder="Min 6 characters" className="input-sleek" />
@@ -116,14 +116,14 @@ export default function AuthPage() {
               <div style={{
                 fontSize: 13, borderRadius: 10, padding: "10px 14px",
                 background: "var(--red-dim)", border: "1px solid var(--red-border)",
-                color: "var(--red)", fontFamily: "'Sora', sans-serif",
+                color: "var(--red)", fontFamily: "'Plus Jakarta Sans', sans-serif",
               }}>{error}</div>
             )}
             {message && (
               <div style={{
                 fontSize: 13, borderRadius: 10, padding: "10px 14px",
                 background: "var(--green-dim)", border: "1px solid var(--green-border)",
-                color: "var(--green)", fontFamily: "'Sora', sans-serif",
+                color: "var(--green)", fontFamily: "'Plus Jakarta Sans', sans-serif",
               }}>{message}</div>
             )}
 

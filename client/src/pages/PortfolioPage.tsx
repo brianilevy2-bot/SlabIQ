@@ -104,7 +104,7 @@ export default function PortfolioPage() {
       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12 }}>
         <div>
           <h1 style={{
-            fontFamily: "'Sora', sans-serif", fontSize: 28, fontWeight: 700,
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 28, fontWeight: 700,
             letterSpacing: "-0.03em", color: "var(--text-primary)", lineHeight: 1, marginBottom: 6,
           }}>My Portfolio</h1>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -126,7 +126,7 @@ export default function PortfolioPage() {
             {(["grid", "list"] as const).map(v => (
               <button key={v} onClick={() => setViewMode(v)} style={{
                 padding: "5px 12px", borderRadius: 6, border: "none", cursor: "pointer",
-                fontFamily: "'Sora', sans-serif", fontSize: 12, fontWeight: 500,
+                fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 12, fontWeight: 500,
                 background: viewMode === v ? "var(--bg-raised)" : "transparent",
                 color: viewMode === v ? "var(--text-primary)" : "var(--text-muted)",
                 boxShadow: viewMode === v ? "var(--shadow)" : "none",
@@ -147,7 +147,7 @@ export default function PortfolioPage() {
           background: "var(--bg-card)", border: "1px solid var(--border-subtle)",
           borderRadius: 12, padding: "16px 18px", boxShadow: "var(--shadow)",
         }}>
-          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Sora', sans-serif", fontWeight: 500 }}>Total Invested</p>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500 }}>Total Invested</p>
           <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 20, fontWeight: 600, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>${totalPaid.toFixed(2)}</p>
           <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4, fontFamily: "'Inter Tight', monospace" }}>{cards.length} cards</p>
         </div>
@@ -156,7 +156,7 @@ export default function PortfolioPage() {
           background: "var(--bg-card)", border: "1px solid var(--border-subtle)",
           borderRadius: 12, padding: "16px 18px", boxShadow: "var(--shadow)",
         }}>
-          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Sora', sans-serif", fontWeight: 500 }}>Current Value</p>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500 }}>Current Value</p>
           <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 20, fontWeight: 600, color: "var(--gold)", letterSpacing: "-0.02em" }}>{hasValues ? `$${totalValue.toFixed(2)}` : "—"}</p>
           <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4, fontFamily: "'Inter Tight', monospace" }}>{hasValues ? "tracked value" : "add values to track"}</p>
         </div>
@@ -166,7 +166,7 @@ export default function PortfolioPage() {
           border: `1px solid ${totalPL != null ? plPositive ? "var(--green-border)" : "var(--red-border)" : "var(--border-subtle)"}`,
           borderRadius: 12, padding: "16px 18px", boxShadow: "var(--shadow)",
         }}>
-          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Sora', sans-serif", fontWeight: 500 }}>P&L</p>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500 }}>P&L</p>
           <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 22, fontWeight: 700, letterSpacing: "-0.02em", color: totalPL != null ? plPositive ? "var(--green)" : "var(--red)" : "var(--text-muted)" }}>
             {totalPL != null ? `${plPositive ? "+" : ""}$${Math.abs(totalPL).toFixed(2)}` : "—"}
           </p>
@@ -179,7 +179,7 @@ export default function PortfolioPage() {
           background: "var(--bg-card)", border: "1px solid var(--border-subtle)",
           borderRadius: 12, padding: "16px 18px", boxShadow: "var(--shadow)",
         }}>
-          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Sora', sans-serif", fontWeight: 500 }}>Avg Cost</p>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500 }}>Avg Cost</p>
           <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 20, fontWeight: 600, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>${avgCost.toFixed(2)}</p>
           <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4, fontFamily: "'Inter Tight', monospace" }}>per card</p>
         </div>
@@ -189,14 +189,14 @@ export default function PortfolioPage() {
       {cards.length > 0 && (
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: 12, padding: "18px 20px", boxShadow: "var(--shadow)" }}>
-            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginBottom: 16, fontFamily: "'Sora', sans-serif" }}>Grade Breakdown</p>
+            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginBottom: 16, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Grade Breakdown</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {sortedGrades.map(([grade, count]) => {
                 const pct = (count / cards.length) * 100;
                 return (
                   <div key={grade}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5, alignItems: "center" }}>
-                      <span style={{ fontFamily: "'Sora', sans-serif", fontSize: 12, color: "var(--text-secondary)", fontWeight: 500 }}>{grade}</span>
+                      <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 12, color: "var(--text-secondary)", fontWeight: 500 }}>{grade}</span>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                         <span style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: "var(--text-muted)" }}>{count} card{count !== 1 ? "s" : ""}</span>
                         <span style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: "var(--text-secondary)", minWidth: 32, textAlign: "right" }}>{Math.round(pct)}%</span>
@@ -215,7 +215,7 @@ export default function PortfolioPage() {
           </div>
 
           <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: 12, padding: "18px 20px", boxShadow: "var(--shadow)" }}>
-            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginBottom: 16, fontFamily: "'Sora', sans-serif" }}>Top Holdings</p>
+            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginBottom: 16, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Top Holdings</p>
             {topCards.map((card, i) => {
               const pl = card.current_value != null ? Number(card.current_value) - Number(card.price_paid) : null;
               const rankColors = ["var(--gold)", "var(--text-secondary)", "var(--text-muted)"];
@@ -223,7 +223,7 @@ export default function PortfolioPage() {
                 <div key={card.id} style={{ display: "flex", alignItems: "center", gap: 12, paddingBottom: 12, marginBottom: 12, borderBottom: i < topCards.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
                   <span style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, fontWeight: 600, color: rankColors[i], width: 16, flexShrink: 0, textAlign: "center" }}>{i + 1}</span>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontFamily: "'Sora', sans-serif", fontSize: 13, fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{card.player}</p>
+                    <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 13, fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{card.player}</p>
                     <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: "var(--text-muted)", marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{card.year} · {card.set_name}</p>
                   </div>
                   <span className={`grade-badge ${getGradeBadgeClass(card.grade)}`} style={{ flexShrink: 0 }}>{card.grade}</span>
@@ -241,14 +241,14 @@ export default function PortfolioPage() {
       {/* ── Limit Banner ──────────────────────────────────── */}
       {isAtLimit && (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "12px 16px", borderRadius: 10, background: "var(--gold-dim)", border: "1px solid var(--gold-border)" }}>
-          <span style={{ fontSize: 13, color: "var(--gold)", fontFamily: "'Sora', sans-serif" }}>You've reached the 20-card free limit.</span>
+          <span style={{ fontSize: 13, color: "var(--gold)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>You've reached the 20-card free limit.</span>
           <button className="btn-gold" style={{ padding: "6px 14px", fontSize: 12, flexShrink: 0 }}>Upgrade to Pro — $4.99/mo</button>
         </div>
       )}
 
       {/* ── Divider ───────────────────────────────────────── */}
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-        <span style={{ fontFamily: "'Sora', sans-serif", fontSize: 12, fontWeight: 600, color: "var(--text-muted)", whiteSpace: "nowrap" }}>Collection</span>
+        <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 12, fontWeight: 600, color: "var(--text-muted)", whiteSpace: "nowrap" }}>Collection</span>
         <div style={{ flex: 1, height: 1, background: "var(--border-subtle)" }} />
       </div>
 
@@ -257,7 +257,7 @@ export default function PortfolioPage() {
         <div style={{ textAlign: "center", padding: "48px 0", fontFamily: "'Inter Tight', monospace", fontSize: 13, color: "var(--text-muted)" }}>Loading...</div>
       ) : cards.length === 0 ? (
         <div style={{ textAlign: "center", padding: "64px 24px", borderRadius: 12, border: "1px dashed var(--border-mid)", background: "var(--gold-dim)" }}>
-          <p style={{ fontFamily: "'Sora', sans-serif", fontSize: 18, fontWeight: 600, color: "var(--text-primary)", marginBottom: 8 }}>Start your collection</p>
+          <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 18, fontWeight: 600, color: "var(--text-primary)", marginBottom: 8 }}>Start your collection</p>
           <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 20 }}>Add your first card to begin tracking</p>
           <button onClick={() => setShowAddModal(true)} className="btn-gold" style={{ padding: "10px 24px", fontSize: 13 }}>+ Add First Card</button>
         </div>
@@ -274,7 +274,7 @@ export default function PortfolioPage() {
                 <div style={{ height: 3, width: "100%", background: card.grade === "Raw" ? "var(--border-mid)" : card.grade.includes("10") ? "linear-gradient(90deg, var(--amber), var(--gold))" : "var(--blue)" }} />
                 <div style={{ padding: "12px 13px" }}>
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 6, marginBottom: 6 }}>
-                    <p style={{ fontFamily: "'Sora', sans-serif", fontSize: 13, fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{card.player}</p>
+                    <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 13, fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{card.player}</p>
                     <span className={`grade-badge ${getGradeBadgeClass(card.grade)}`} style={{ flexShrink: 0 }}>{card.grade}</span>
                   </div>
                   <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: "var(--text-muted)", marginBottom: 12, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -287,13 +287,13 @@ export default function PortfolioPage() {
                 </div>
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-2"
                   style={{ background: "rgba(7,16,31,0.88)", backdropFilter: "blur(4px)" }}>
-                  <button onClick={() => setEditingCard(card)} style={{ padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 500, cursor: "pointer", fontFamily: "'Sora', sans-serif", background: "var(--gold-dim)", color: "var(--gold)", border: "1px solid var(--gold-border)" }}>Edit</button>
-                  <button onClick={() => { if (confirm("Remove this card?")) deleteCard(card.id); }} style={{ padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 500, cursor: "pointer", fontFamily: "'Sora', sans-serif", background: "var(--red-dim)", color: "var(--red)", border: "1px solid var(--red-border)" }}>Delete</button>
+                  <button onClick={() => setEditingCard(card)} style={{ padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 500, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif", background: "var(--gold-dim)", color: "var(--gold)", border: "1px solid var(--gold-border)" }}>Edit</button>
+                  <button onClick={() => { if (confirm("Remove this card?")) deleteCard(card.id); }} style={{ padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 500, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif", background: "var(--red-dim)", color: "var(--red)", border: "1px solid var(--red-border)" }}>Delete</button>
                 </div>
               </div>
             );
           })}
-          <button onClick={() => setShowAddModal(true)} style={{ borderRadius: 10, border: "1px dashed var(--border-mid)", background: "transparent", color: "var(--text-muted)", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, padding: "32px 0", transition: "all 0.15s", fontFamily: "'Sora', sans-serif" }}
+          <button onClick={() => setShowAddModal(true)} style={{ borderRadius: 10, border: "1px dashed var(--border-mid)", background: "transparent", color: "var(--text-muted)", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, padding: "32px 0", transition: "all 0.15s", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--gold-border)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--gold)"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border-mid)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--text-muted)"; }}
           >
@@ -312,7 +312,7 @@ export default function PortfolioPage() {
               >
                 <div style={{ width: 3, alignSelf: "stretch", borderRadius: 99, flexShrink: 0, background: card.grade === "Raw" ? "var(--border-mid)" : card.grade.includes("10") ? "linear-gradient(180deg, var(--gold), var(--amber))" : "var(--blue)" }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontFamily: "'Sora', sans-serif", fontSize: 13, fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{card.player}</p>
+                  <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 13, fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{card.player}</p>
                   <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, color: "var(--text-muted)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{card.year} {card.set_name}{card.card_number ? ` #${card.card_number}` : ""}</p>
                 </div>
                 <span className={`grade-badge ${getGradeBadgeClass(card.grade)}`} style={{ flexShrink: 0 }}>{card.grade}</span>
@@ -321,8 +321,8 @@ export default function PortfolioPage() {
                   <p style={{ fontFamily: "'Inter Tight', monospace", fontSize: 11, marginTop: 1, color: pl != null ? pl >= 0 ? "var(--green)" : "var(--red)" : "var(--text-muted)" }}>{pl != null ? `${pl >= 0 ? "+" : ""}$${pl.toFixed(2)}` : "—"}</p>
                 </div>
                 <div className="opacity-0 group-hover:opacity-100 transition" style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-                  <button onClick={() => setEditingCard(card)} style={{ padding: "5px 10px", borderRadius: 7, fontSize: 11, cursor: "pointer", fontFamily: "'Sora', sans-serif", fontWeight: 500, background: "var(--gold-dim)", color: "var(--gold)", border: "1px solid var(--gold-border)" }}>Edit</button>
-                  <button onClick={() => { if (confirm("Remove this card?")) deleteCard(card.id); }} style={{ padding: "5px 10px", borderRadius: 7, fontSize: 11, cursor: "pointer", fontFamily: "'Sora', sans-serif", fontWeight: 500, background: "var(--red-dim)", color: "var(--red)", border: "1px solid var(--red-border)" }}>Del</button>
+                  <button onClick={() => setEditingCard(card)} style={{ padding: "5px 10px", borderRadius: 7, fontSize: 11, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, background: "var(--gold-dim)", color: "var(--gold)", border: "1px solid var(--gold-border)" }}>Edit</button>
+                  <button onClick={() => { if (confirm("Remove this card?")) deleteCard(card.id); }} style={{ padding: "5px 10px", borderRadius: 7, fontSize: 11, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, background: "var(--red-dim)", color: "var(--red)", border: "1px solid var(--red-border)" }}>Del</button>
                 </div>
               </div>
             );
