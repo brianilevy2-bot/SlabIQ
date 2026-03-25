@@ -96,10 +96,7 @@ export default function Nav({ currentPath, onNavigate, onLogout, darkMode, onTog
             >
               <ThemeIcon darkMode={darkMode} />
             </button>
-            <button className="btn-gold text-[11px] px-3 py-1.5 tracking-widest uppercase">
-              Upgrade Pro
-            </button>
-            <button onClick={onLogout}
+<button onClick={onLogout}
               className="text-[11px] uppercase tracking-widest transition"
               style={{ color: "var(--text-muted)" }}
               onMouseEnter={e => (e.currentTarget.style.color = "var(--text-secondary)")}
@@ -121,10 +118,7 @@ export default function Nav({ currentPath, onNavigate, onLogout, darkMode, onTog
             >
               <ThemeIcon darkMode={darkMode} />
             </button>
-            <button className="btn-gold text-[10px] px-2.5 py-1.5 tracking-widest uppercase">
-              Pro
-            </button>
-            <button
+<button
               onClick={() => setMenuOpen(!menuOpen)}
               className="w-8 h-8 flex flex-col items-center justify-center gap-1.5 rounded-md transition"
               style={{ color: "var(--text-muted)" }}
