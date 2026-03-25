@@ -261,7 +261,7 @@ export default function SetsPage() {
               Set Tracker
             </h1>
             <p className="mono text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-              Track your set completion goals
+              Track which cards you still need to complete a set.
             </p>
           </div>
           <button onClick={() => setShowCreateSet(true)} className="btn-gold px-4 py-2 text-sm">
