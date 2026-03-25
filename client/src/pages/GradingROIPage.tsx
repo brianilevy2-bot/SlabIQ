@@ -15,6 +15,57 @@ const verdictConfig: Record<string, { color: string; bg: string; border: string 
   "Don't Bother":  { color: "var(--red)",    bg: "rgba(255,77,109,0.06)",  border: "rgba(255,77,109,0.25)"  },
 };
 
+const TOOLTIPS: Record<string, string> = {
+  "Raw":           "The price this card sells for ungraded on eBay sold listings.",
+  "PSA 9":         "What this card sells for with a PSA 9 grade. Check eBay sold listings filtered to PSA 9.",
+  "PSA 10":        "What this card sells for with a PSA 10 grade — the top grade and biggest price jump.",
+  "Grading Cost":  "Total cost to submit: PSA fee + shipping both ways. PSA Economy is ~$25–50 depending on value.",
+  "PSA 10 Chance": "Your honest estimate that this card grades a 10. Most raw cards land 15–30%. Be conservative.",
+};
+
+function InfoTooltip({ text }: { text: string }) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
+      <button
+        type="button"
+        onMouseEnter={() => setVisible(true)}
+        onMouseLeave={() => setVisible(false)}
+        onFocus={() => setVisible(true)}
+        onBlur={() => setVisible(false)}
+        style={{
+          width: 14, height: 14, borderRadius: "50%", border: "1px solid var(--border-mid)",
+          background: "var(--bg-subtle)", color: "var(--text-muted)", cursor: "default",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 9, fontWeight: 700, fontFamily: "serif", lineHeight: 1,
+          flexShrink: 0, outline: "none", padding: 0,
+        }}
+      >i</button>
+      {visible && (
+        <div style={{
+          position: "absolute", bottom: "calc(100% + 6px)", left: "50%",
+          transform: "translateX(-50%)", zIndex: 100,
+          background: "var(--bg-raised)", border: "1px solid var(--border-mid)",
+          borderRadius: 8, padding: "8px 10px", width: 200,
+          boxShadow: "var(--shadow-raised)",
+          fontSize: 11, color: "var(--text-secondary)",
+          fontFamily: "'Plus Jakarta Sans', sans-serif", lineHeight: 1.5,
+          pointerEvents: "none",
+        }}>
+          {text}
+          {/* Arrow */}
+          <div style={{
+            position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)",
+            width: 0, height: 0,
+            borderLeft: "5px solid transparent", borderRight: "5px solid transparent",
+            borderTop: "5px solid var(--border-mid)",
+          }} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function GradingROIPage() {
   const [rawPrice,    setRawPrice]    = useState("");
   const [psa9Price,   setPsa9Price]   = useState("");
@@ -54,10 +105,10 @@ export default function GradingROIPage() {
   return (
     <div className="max-w-xl mx-auto animate-fade-up">
       <div className="mb-8">
-        <h1 className="serif text-2xl md:text-3xl font-semibold tracking-wide" style={{ color: "var(--text-primary)" }}>
+        <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 28, fontWeight: 700, letterSpacing: "-0.03em", color: "var(--text-primary)", marginBottom: 6 }}>
           Grading ROI
         </h1>
-        <p className="text-sm mt-1.5" style={{ color: "var(--text-muted)" }}>
+        <p style={{ fontSize: 13, color: "var(--text-muted)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           Should you submit? Run the numbers before you commit.
         </p>
       </div>
@@ -65,8 +116,8 @@ export default function GradingROIPage() {
       <form onSubmit={handleCalculate} className="space-y-4">
         <div className="rounded-xl p-4 md:p-6 space-y-5"
           style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}>
-          <p className="text-[10px] uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>
-            — Market Prices
+          <p style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            Market Prices
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
@@ -75,8 +126,12 @@ export default function GradingROIPage() {
               { label: "PSA 10", val: psa10Price, set: setPsa10Price, ph: "0.00" },
             ].map(f => (
               <div key={f.label}>
-                <label className="block text-[10px] uppercase tracking-widest mb-2"
-                  style={{ color: "var(--text-muted)" }}>{f.label}</label>
+                <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 6 }}>
+                  <label style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    {f.label}
+                  </label>
+                  <InfoTooltip text={TOOLTIPS[f.label]} />
+                </div>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 mono text-sm select-none"
                     style={{ color: "var(--text-muted)" }}>$</span>
@@ -94,13 +149,17 @@ export default function GradingROIPage() {
 
         <div className="rounded-xl p-4 md:p-6 space-y-5"
           style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}>
-          <p className="text-[10px] uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>
-            — Grading Details
+          <p style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            Grading Details
           </p>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[10px] uppercase tracking-widest mb-2"
-                style={{ color: "var(--text-muted)" }}>Grading Cost</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 6 }}>
+                <label style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  Grading Cost
+                </label>
+                <InfoTooltip text={TOOLTIPS["Grading Cost"]} />
+              </div>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 mono text-sm select-none"
                   style={{ color: "var(--text-muted)" }}>$</span>
@@ -110,8 +169,12 @@ export default function GradingROIPage() {
               </div>
             </div>
             <div>
-              <label className="block text-[10px] uppercase tracking-widest mb-2"
-                style={{ color: "var(--text-muted)" }}>PSA 10 Chance</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 6 }}>
+                <label style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  PSA 10 Chance
+                </label>
+                <InfoTooltip text={TOOLTIPS["PSA 10 Chance"]} />
+              </div>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 mono text-sm select-none"
                   style={{ color: "var(--text-muted)" }}>%</span>
@@ -133,8 +196,7 @@ export default function GradingROIPage() {
           </div>
         )}
 
-        <button type="submit" disabled={loading}
-          className="btn-gold w-full py-3 text-sm tracking-widest uppercase">
+        <button type="submit" disabled={loading} className="btn-gold w-full py-3 text-sm">
           {loading ? "Calculating..." : "Calculate ROI"}
         </button>
       </form>
@@ -143,13 +205,13 @@ export default function GradingROIPage() {
         <div className="mt-6 space-y-3 animate-fade-up">
           <div className="rounded-xl px-6 py-6 text-center"
             style={{ background: vc.bg, border: `1px solid ${vc.border}` }}>
-            <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>
+            <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               Verdict
             </p>
-            <p className="serif text-2xl md:text-3xl font-semibold" style={{ color: vc.color }}>
+            <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 28, fontWeight: 700, letterSpacing: "-0.02em", color: vc.color }}>
               {result.verdict}
             </p>
-            <p className="text-sm mt-2" style={{ color: vc.color, opacity: 0.75 }}>
+            <p style={{ fontSize: 13, marginTop: 6, color: vc.color, opacity: 0.75, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {result.explanation}
             </p>
           </div>
@@ -162,7 +224,7 @@ export default function GradingROIPage() {
             ].map(m => (
               <div key={m.label} className="rounded-xl px-4 py-4"
                 style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}>
-                <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>
+                <p style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500 }}>
                   {m.label}
                 </p>
                 <p className="mono text-lg md:text-xl font-medium" style={{ color: m.color }}>{m.value}</p>
